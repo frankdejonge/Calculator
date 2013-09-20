@@ -2,6 +2,26 @@
 
 class Calculator
 {
+	public $operations = [];
+
+	public function addOperation(OperationInterface $operation)
+	{
+		$this->operations[$operation->getToken()] = $operation;
+
+		return $this;
+	}
+
+	public function getOperation($token)
+	{
+		if ( ! isset($this->operations[$token]))
+		{
+			$this->write(' !! COULD NOT FIND OPERATION FOR TOKEN: '.$token.' !! ');
+			exit(0);
+		}
+
+		return $this->operations[$token];
+	}
+
 	public function read()
 	{
 		$output = trim(fgets(STDIN));

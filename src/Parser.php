@@ -38,9 +38,9 @@ class Parser
 			{
 				$part = new Number($part);
 			}
-			else
+			elseif ( ! is_object($part))
 			{
-				$part = new Opperation($part);
+				$part = $this->calculator->getOperation($part);
 			}
 
 			$segments[] = $part;
@@ -59,20 +59,31 @@ class Parser
 	public function executeGroup($group)
 	{
 		$first = array_shift($group);
-		$result = $first->getValue();
+		$result = is_object($first) ? $first->getValue() : $this->executeGroup($first);
 
 		foreach ($group as $part)
 		{
-			if ($part instanceof Opperation)
+			if (is_array($part))
 			{
-				$opperation = $part;
+				$part = $this->executeGroup($part);
+			}
+
+			if ($part instanceof AbstractOperation)
+			{
+				$operation = $part;
 				continue;
 			}
 
-			$result = $opperation->execute($result, $part->getValue());
+			if ($result === null)
+			{
+				$result = $part->getValue();
+				continue;
+			}
+
+			$result = $operation->execute($result, $part->getValue());
 		}
 
-		return $result;
+		return new Number($result);
 	}
 
 	public function groupByPrecedance(array $segments)
@@ -82,27 +93,29 @@ class Parser
 
 		foreach ($segments as $offset => $segment)
 		{
-			if ($precedance === false and $segment instanceof Opperation)
+			if ($precedance === false and $segment instanceof AbstractOperation)
 			{
-				$precedance = $segment->getPrecedance();
+				$precedance = $segment->getPrecedence();
 			}
 
-			if ($segment instanceof Number or $segment->getPrecedance() === $precedance)
+			if ($segment instanceof Number or $segment->getPrecedence() === $precedance)
 			{
 				$group[] = $segment;
 				continue;
 			}
 
-			if ($segment->getPrecedance() > $precedance)
+			if ($segment->getPrecedence() > $precedance)
 			{
-				$last = array_shift($group);
-				$offset--;
+				$precedance = $segment->getPrecedence();
+				$last = array_pop($group);
+				$tail = array_slice($segments, $index-3);
+				$group[] = $this->groupByPrecedance($tail);
+
+				return $group;
 			}
 
-			$tail = array_slice($segments, $offset);
-			$group[] = $this->groupByPrecedance($tail);
-
-			return $group;
+			$precedance = $segment->getPrecedence();
+			$group[] = $segment;
 		}
 
 		return $group;

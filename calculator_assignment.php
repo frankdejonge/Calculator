@@ -1,11 +1,12 @@
 <?php
 
-$classes = glob(__DIR__.'/src/*.php');
-
-foreach ($classes as $class)
-{
-	include $class;
-}
+spl_autoload_register(function ($class) {
+	include __DIR__.'/src/'.$class.'.php';
+});
 
 $calculator = new Calculator();
+$calculator->addOperation(new AddOperation);
+$calculator->addOperation(new MinusOperation);
+$calculator->addOperation(new TimesOperation);
+$calculator->addOperation(new DevideOperation);
 $calculator->run();
