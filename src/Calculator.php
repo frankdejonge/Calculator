@@ -4,6 +4,12 @@ class Calculator
 {
 	public $operations = [];
 
+	public function __construct(InputInterface $input, OutputInterface $output)
+	{
+		$this->input = $input;
+		$this->output = $output;
+	}
+
 	public function addOperation(OperationInterface $operation)
 	{
 		$this->operations[$operation->getToken()] = $operation;
@@ -24,29 +30,12 @@ class Calculator
 
 	public function read()
 	{
-		$output = trim(fgets(STDIN));
-
-		if (empty($output))
-		{
-			return null;
-		}
-
-		return $output;
+		return $this->input->read();
 	}
 
 	public function write($output = '', $newline = true)
 	{
-		if ( ! is_string($output))
-		{
-			$output = print_r($output, true);
-		}
-
-		if ($newline)
-		{
-			$output .= PHP_EOL;
-		}
-
-		fwrite(STDOUT, $output);
+		return $this->output->write($output, $newline);
 	}
 
 	public function run()
