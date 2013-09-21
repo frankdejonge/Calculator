@@ -58,7 +58,7 @@ class Parser
 		{
 			if (is_array($part))
 			{
-				$part = $this->executeGroup($part);
+				$part = new Number($this->executeGroup($part));
 			}
 
 			if ($part instanceof AbstractOperation)
@@ -67,16 +67,13 @@ class Parser
 				continue;
 			}
 
-			if ($result === null)
-			{
-				$result = $part->getValue();
-				continue;
-			}
-
+			echo PHP_EOL.$result.' '.$operation->getToken().' '.$part->getValue(). ' = ';
 			$result = $operation->execute($result, $part->getValue());
+			echo $result.PHP_EOL.PHP_EOL;
+
 		}
 
-		return new Number($result);
+		return $result;
 	}
 
 	protected function groupByPrecedance(array $segments)
@@ -107,7 +104,7 @@ class Parser
 			}
 
 			$precedance = $segment->getPrecedence();
-			$group[] = $segment;
+			$group = [$group, $segment];
 		}
 
 		return $group;

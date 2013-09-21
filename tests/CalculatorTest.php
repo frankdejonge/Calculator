@@ -28,7 +28,7 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 
 		$this->calculator->run();
 		$output = $this->output->getOutput();
-		$this->assertContains("Error: Could not find operation for token [#]", $output, print_r($output, true));
+		$this->assertContains("Error: Could not find operation for token [#]", $output);
 
 		// Check it didn't continue
 		$this->assertNotContains("Error: Could not find operation for token [-]", $output);
@@ -45,6 +45,8 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 			['2 / 1', 2],
 			['2 * 2', 4],
 			['2 * 2.5', 5],
+			['2 + (20 * 2)', 42],
+			['10 * 20 - 2 / 2 + 2', 201],
 		];
 	}
 
@@ -56,7 +58,6 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 		$this->input->setInput([$calculation]);
 		$this->calculator->run();
 		$output = $this->output->getOutput();
-		print_r($output);
-		$this->assertContains('RESULT = '.$result, $output, print_r($output, true));
+		$this->assertContains('RESULT = '.$result, $output);
 	}
 }
