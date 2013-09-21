@@ -8,4 +8,5 @@ $calculator->addOperation(new MinusOperation);
 $calculator->addOperation(new TimesOperation);
 $calculator->addOperation(new DivideOperation);
 $calculator->addOperation(new ModulusOperation);
+$calculator->addOperation(new PowerOperation);
 $calculator->run();

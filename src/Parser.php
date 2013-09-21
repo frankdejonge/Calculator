@@ -2,20 +2,43 @@
 
 class Parser
 {
-	public $input;
 	public $calculator;
 
-	public function __construct(Calculator $calculator, $input)
+	public function __construct(Calculator $calculator)
 	{
 		$this->calculator = $calculator;
-		$this->input = trim($input);
 	}
 
-	public function parse()
+	public function parseFunctions($match)
 	{
-		$input = $this->parseGroup($this->input);
+		$function = $this->calculator->getFunction($match[1]);
 
-		return $input;
+		return $function->execute($this, $match[2]);
+	}
+
+	public function parse($input)
+	{
+		$input = trim($input);
+		$functions = $this->calculator->getFunctionNames();
+
+		if ( ! empty($functions))
+		{
+			$regex = '#('.join('|', $functions).')\((.*)\)#';
+
+			while (preg_match($regex, $input))
+			{
+				$input = preg_replace_callback($regex, [$this, 'parseFunctions'], $input);
+			}
+		}
+
+		while (strpos($input, '(') !== false)
+		{
+			$input = preg_replace_callback('#\(((?![\(\)]).)+\)#u', [$this, 'parseNesting'], $input);
+		}
+
+		$output = $this->parseGroup($input);
+
+		return $output;
 	}
 
 	protected function parseGroup($input)
@@ -102,7 +125,7 @@ class Parser
 		return array_reverse($map);
 	}
 
-	public function parseSubstring($match)
+	public function parseNesting($match)
 	{
 		$partial = substr($match[0], 1, -1);
 		return $this->parseGroup($partial);
@@ -110,11 +133,6 @@ class Parser
 
 	public function parseString($input)
 	{
-		while (strpos($input, '(') !== false)
-		{
-			$input = preg_replace_callback('#\(((?![\(\)]).)+\)#u', [$this, 'parseSubstring'], $input);
-		}
-
 		$input = str_replace(' ', '', $input);
 
 		$replacer = function ($match) {

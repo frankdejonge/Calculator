@@ -3,6 +3,7 @@
 class Calculator
 {
 	protected $operations = [];
+	protected $functions = [];
 	protected $input;
 	protected $output;
 
@@ -29,6 +30,30 @@ class Calculator
 		}
 
 		return $this->operations[$token];
+	}
+
+	public function addFunction(FunctionInterface $function)
+	{
+		$this->functions[$function->getName()] = $function;
+
+		return $this;
+	}
+
+	public function getFunction($token)
+	{
+		if ( ! isset($this->functions[$token]))
+		{
+			$token = preg_replace('/[0-9\.]/', '', $token);
+
+			throw new LogicException('Could not find function for token ['.$token.']');
+		}
+
+		return $this->functions[$token];
+	}
+
+	public function getFunctionNames()
+	{
+		return array_keys($this->functions);
 	}
 
 	public function getOperationTokens()
@@ -82,8 +107,8 @@ class Calculator
 
 	protected function execute($input)
 	{
-		$parser = new Parser($this, $input);
+		$parser = new Parser($this);
 
-		return $parser->parse();
+		return $parser->parse($input);
 	}
 }
