@@ -21,7 +21,7 @@ The calculator can now:
 
 #### While taking into account
 * Precedence or operators (3 levels)
-* Nested expressions: `(1 + 2) * 3)`
+* Nested expressions: `((1 + 2) * 3)`
 * …FUNCTIONS
 
 I added mathematical functions into the mix. This was an exercise to see wether my code was open enough to extend upon. Also, another guy in the IRC challenged me to try it, so yeah. They look somewhat like this:
@@ -45,7 +45,6 @@ $ php calculator_assignment.php
 ## Conslusion
 
 I'm actually against these coding challenges which are time based. They should be about coding the best thing in a reasonable time. Of course you could do something easier (I took it a bit too far) but if you want to know how somebody codes, look for open-source contributions. Those contributions show you how a developer works, not by him/herself but within a group. That shows way more skill than a random brainfart like this.
-
 
 # [DISCLAIMER]
 
