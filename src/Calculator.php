@@ -23,11 +23,17 @@ class Calculator
 	{
 		if ( ! isset($this->operations[$token]))
 		{
-			$this->output->write(' !! COULD NOT FIND OPERATION FOR TOKEN: ['.$token.'] !! ');
-			exit(0);
+			$token = preg_replace('/[0-9\.]/', '', $token);
+
+			throw new LogicException('Could not find operation for token ['.$token.']');
 		}
 
 		return $this->operations[$token];
+	}
+
+	public function getOperationTokens()
+	{
+		return array_keys($this->operations);
 	}
 
 	public function run()
@@ -38,13 +44,33 @@ class Calculator
 
 		while ($input = $this->input->read())
 		{
-			$output = $this->execute($input);
-			$this->output->write('RESULT = '.$output);
-			$this->output->write();
+			if ( ! $this->process($input))
+			{
+				break;
+			}
+
 			$this->output->write('CALCULATION: ', false);
 		}
 
-		$this->write('Bye!');
+		$this->output->write('Bye!');
+	}
+
+	protected function process($input)
+	{
+		try
+		{
+			$output = $this->execute($input);
+			$this->output->write('RESULT = '.$output);
+			$this->output->write();
+		}
+		catch (Exception $e)
+		{
+			$this->output->write('Error: '.$e->getMessage());
+
+			return false;
+		}
+
+		return true;
 	}
 
 	protected function execute($input)

@@ -100,7 +100,7 @@ class Parser
 			if ($segment->getPrecedence() > $precedance)
 			{
 				array_pop($group);
-				$tail = array_slice($segments, $index-3);
+				$tail = array_slice($segments, $offset-1);
 				$group[] = $this->groupByPrecedance($tail);
 
 				return $group;
@@ -133,8 +133,17 @@ class Parser
 			return '__EXPLODE__'.$match[0].'__EXPLODE__';
 		};
 
-		$input = preg_replace_callback('/(?<=[0-9])\D{1}/', $replacer, $input);
+		$regex = $this->getOperationsRegex();
+		$input = preg_replace_callback('/(?<=[0-9])['.$regex.']{1}/', $replacer, $input);
 
 		return explode('__EXPLODE__', $input);
+	}
+
+	public function getOperationsRegex()
+	{
+		$tokens = $this->calculator->getOperationTokens();
+		$tokens = join($tokens);
+
+		return preg_quote($tokens, '/');
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-class DevideOperation extends AbstractOperation
+class DivideOperation extends AbstractOperation
 {
 	protected $token = '/';
 	protected $precedence = 1;
