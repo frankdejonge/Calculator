@@ -44,84 +44,75 @@ class Parser
 
 	protected function compute(array $segments)
 	{
-		$grouped = $this->groupByPrecedance($segments);
+		$map = $this->mapPrecedence($segments);
 
-		return $this->executeGroup($grouped);
+		foreach ($map as $precedence)
+		{
+			$segments = $this->executePrecedence($precedence, $segments);
+		}
+
+		return $segments[0]->getValue();
 	}
 
-	protected function executeGroup($group)
+	protected function executePrecedence($precedence, array $segments)
 	{
-		$first = array_shift($group);
-		$result = is_object($first) ? $first->getValue() : $this->executeGroup($first);
-
-		foreach ($group as $part)
+		$result = [array_shift($segments)];
+		$skip = false;
+		foreach ($segments as $index => $segment)
 		{
-			if (is_array($part))
+			if ($skip === true)
 			{
-				$part = new Number($this->executeGroup($part));
-			}
-
-			if ($part instanceof AbstractOperation)
-			{
-				$operation = $part;
+				$skip = false;
 				continue;
 			}
 
-			echo PHP_EOL.$result.' '.$operation->getToken().' '.$part->getValue(). ' = ';
-			$result = $operation->execute($result, $part->getValue());
-			echo $result.PHP_EOL.PHP_EOL;
+			if ($segment instanceof AbstractOperation and $segment->getPrecedence() === $precedence)
+			{
+				$last = array_pop($result);
+				$next = $segments[$index+1];
+				$computed = $segment->execute(
+					$last->getValue(),
+					$next->getValue()
+				);
+				$skip = true;
+				$result[] = new Number($computed);
+				continue;
+			}
 
+			$result[] = $segment;
 		}
 
 		return $result;
 	}
 
-	protected function groupByPrecedance(array $segments)
+	protected function mapPrecedence(array $segments)
 	{
-		$group = [];
-		$precedance = false;
+		$map = [];
 
-		foreach ($segments as $offset => $segment)
+		foreach ($segments as $segment)
 		{
-			if ($precedance === false and $segment instanceof AbstractOperation)
+			if ($segment instanceof AbstractOperation)
 			{
-				$precedance = $segment->getPrecedence();
+				$map[] = $segment->getPrecedence();
 			}
-
-			if ($segment instanceof Number or $segment->getPrecedence() === $precedance)
-			{
-				$group[] = $segment;
-				continue;
-			}
-
-			if ($segment->getPrecedence() > $precedance)
-			{
-				array_pop($group);
-				$tail = array_slice($segments, $offset-1);
-				$group[] = $this->groupByPrecedance($tail);
-
-				return $group;
-			}
-
-			$precedance = $segment->getPrecedence();
-			$group = [$group, $segment];
 		}
 
-		return $group;
+		$map = array_unique($map);
+		sort($map);
+		return array_reverse($map);
 	}
 
 	public function parseSubstring($match)
 	{
-		$match = substr($match[0], 1, -1);
-
-		return $this->parseGroup($match);
+		$partial = substr($match[0], 1, -1);
+		return $this->parseGroup($partial);
 	}
 
 	public function parseString($input)
 	{
 		while (strpos($input, '(') !== false)
 		{
-			$input = preg_replace_callback('#\(((?![\(\)]).+)\)#', [$this, 'parseSubstring'], $input);
+			$input = preg_replace_callback('#\(((?![\(\)]).)+\)#u', [$this, 'parseSubstring'], $input);
 		}
 
 		$input = str_replace(' ', '', $input);

@@ -65,6 +65,13 @@ class Calculator
 		}
 		catch (Exception $e)
 		{
+			if ( ! ($e instanceof LogicException))
+			{
+				$this->output->write((string) $e);
+
+				return false;
+			}
+
 			$this->output->write('Error: '.$e->getMessage());
 
 			return false;

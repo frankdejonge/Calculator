@@ -47,6 +47,7 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 			['2 * 2.5', 5],
 			['2 + (20 * 2)', 42],
 			['10 * 20 - 2 / 2 + 2', 201],
+			['2 % 3', 2]
 		];
 	}
 
@@ -58,6 +59,6 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 		$this->input->setInput([$calculation]);
 		$this->calculator->run();
 		$output = $this->output->getOutput();
-		$this->assertContains('RESULT = '.$result, $output);
+		$this->assertContains('RESULT = '.$result, $output, print_r($output, true));
 	}
 }
