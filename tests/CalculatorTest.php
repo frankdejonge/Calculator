@@ -67,4 +67,22 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 		$output = $this->output->getOutput();
 		$this->assertContains('RESULT = '.$result, $output, print_r($output, true));
 	}
+
+	/**
+	 * @expectedException LogicException
+	 */
+	public function testInvalidFunction()
+	{
+		$function = new InvalidFunction();
+		$function->getName();
+	}
+
+	/**
+	 * @expectedException LogicException
+	 */
+	public function testInvalidOperation()
+	{
+		$operation = new InvalidOperation();
+		$operation->getToken();
+	}
 }

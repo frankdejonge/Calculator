@@ -9,7 +9,7 @@ abstract class AbstractOperation implements OperationInterface
 	{
 		if ( ! $this->token)
 		{
-			throw new Exception(__CLASS__.' should define a token');
+			throw new LogicException(__CLASS__.' should define a token');
 		}
 
 		return $this->token;

@@ -8,7 +8,7 @@ abstract class AbstractFunction implements FunctionInterface
 	{
 		if ( ! $this->name)
 		{
-			throw new Exception(__CLASS__.' should define a name');
+			throw new LogicException(__CLASS__.' should define a name');
 		}
 
 		return $this->name;
