@@ -39,6 +39,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 		$this->calculator->addOperation(new ModulusOperation);
 		$this->calculator->addOperation(new PowerOperation);
 		$this->calculator->addFunction(new SqrtFunction);
+		$this->calculator->addFunction(new RoundFunction);
 	}
 
 	public function testUnknownOperation()
@@ -85,7 +86,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 			['(20*4/2)-((13)+14+(4/2))', 11],
 			['2 % 3', 2],
 			['sqrt(9)', 3],
-			['sqrt(3 + 3 + sqrt(9))', 3],
+			['sqrt(3 + 3 + sqrt(round(8.75)))', 3],
 		];
 	}
 

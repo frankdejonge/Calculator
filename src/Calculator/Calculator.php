@@ -86,7 +86,7 @@ class Calculator
 			$this->output->write('RESULT = '.$output);
 			$this->output->write();
 		}
-		catch (Exception $e)
+		catch (LogicException $e)
 		{
 			$this->output->write('Error: '.$e->getMessage());
 
