@@ -24,7 +24,13 @@ The calculator can now:
 * Nested expressions: `(1 + 2) * 3)`
 * …FUNCTIONS
 
-I added mathematical functions into the mix. This was an exercise to see wether my code was open enough to extend upon. Also, another guy in the IRC challenged me to try it, so yeah.
+I added mathematical functions into the mix. This was an exercise to see wether my code was open enough to extend upon. Also, another guy in the IRC challenged me to try it, so yeah. They look somewhat like this:
+
+```
+sqrt(3 + 3 + sqrt(9))
+```
+
+As you can see above, nesting is supported for functions too.
 
 ## Check it out for yourself.
 
@@ -36,4 +42,11 @@ $ php calculator_assignment.php
 
 … and off you go.
 
+## Conslusion
 
+I'm actually against these coding challenges which are time based. They should be about coding the best thing in a reasonable time. Of course you could do something easier (I took it a bit too far) but if you want to know how somebody codes, look for open-source contributions. Those contributions show you how a developer works, not by him/herself but within a group. That shows way more skill than a random brainfart like this.
+
+
+# [DISCLAIMER]
+
+I did not add docblocks, I normally do.
