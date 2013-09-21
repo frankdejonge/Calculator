@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class SqrtFunction extends AbstractFunction
 {
 	protected $name = 'sqrt';

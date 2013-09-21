@@ -1,5 +1,10 @@
 <?php
 
+namespace Calculator;
+
+use LogicException;
+use Exception;
+
 class Calculator
 {
 	protected $operations = [];

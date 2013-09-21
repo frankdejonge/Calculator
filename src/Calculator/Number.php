@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class Number
 {
 	public $value;

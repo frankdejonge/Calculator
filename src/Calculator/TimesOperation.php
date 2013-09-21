@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class TimesOperation extends AbstractOperation
 {
 	protected $token = '*';

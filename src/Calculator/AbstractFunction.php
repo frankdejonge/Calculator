@@ -1,5 +1,9 @@
 <?php
 
+namespace Calculator;
+
+use LogicException;
+
 abstract class AbstractFunction implements FunctionInterface
 {
 	protected $name = false;
@@ -25,6 +29,4 @@ abstract class AbstractFunction implements FunctionInterface
 	{
 		return preg_replace('#^'.$this->name.'\((.*)\)$#', '$1', $expression);
 	}
-
-	abstract public function compute($expression);
 }

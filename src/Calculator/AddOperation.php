@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class AddOperation extends AbstractOperation
 {
 	protected $token = '+';

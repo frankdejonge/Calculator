@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class PowerOperation extends AbstractOperation
 {
 	protected $token = '^';

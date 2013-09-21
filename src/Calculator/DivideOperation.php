@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class DivideOperation extends AbstractOperation
 {
 	protected $token = '/';

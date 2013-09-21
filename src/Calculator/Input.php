@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class Input implements InputInterface
 {
 	public function read()
@@ -8,7 +10,7 @@ class Input implements InputInterface
 
 		if (empty($output))
 		{
-			return null;
+			$output = null;
 		}
 
 		return $output;

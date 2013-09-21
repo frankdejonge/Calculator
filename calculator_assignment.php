@@ -1,6 +1,11 @@
 <?php
 
+namespace Calculator;
+
 include './autoloader.php';
+
+var_dump(STDIN);
+die();
 
 $calculator = new Calculator(new Input, new Output);
 $calculator->addOperation(new AddOperation);

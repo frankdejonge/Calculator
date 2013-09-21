@@ -1,5 +1,9 @@
 <?php
 
+namespace Calculator;
+
+use LogicException;
+
 abstract class AbstractOperation implements OperationInterface
 {
 	protected $token = false;

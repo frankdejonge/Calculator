@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 interface OperationInterface
 {
 	public function execute($base, $subject);

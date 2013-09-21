@@ -1,5 +1,7 @@
 <?php
 
+use Calculator\OutputInterface;
+
 class ArrayOutput implements OutputInterface
 {
 	protected $output = [];

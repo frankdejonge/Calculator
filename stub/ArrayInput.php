@@ -1,5 +1,7 @@
 <?php
 
+use Calculator\InputInterface;
+
 class ArrayInput implements InputInterface
 {
 	public function setInput(array $input)

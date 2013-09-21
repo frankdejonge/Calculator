@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class ModulusOperation extends AbstractOperation
 {
 	protected $token = '%';

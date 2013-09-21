@@ -1,6 +1,27 @@
 <?php
 
-class CalculatorTest extends PHPUnit_Framework_TestCase
+namespace Calculator;
+
+use ArrayInput;
+use ArrayOutput;
+use InvalidFunction;
+use InvalidOperation;
+use LogicException;
+
+function fgets($resource)
+{
+	return '';
+}
+
+$written;
+
+function fwrite ($resource, $content)
+{
+	global $written;
+	$written = $content;
+}
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
 	protected $calculator;
 	protected $input;
@@ -80,7 +101,7 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException LogicException
+	 * @expectedException \LogicException
 	 */
 	public function testInvalidFunction()
 	{
@@ -89,11 +110,25 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException LogicException
+	 * @expectedException \LogicException
 	 */
 	public function testInvalidOperation()
 	{
 		$operation = new InvalidOperation();
 		$operation->getToken();
+	}
+
+	public function testInput()
+	{
+		$input = new Input;
+		$this->assertNull($input->read());
+	}
+
+	public function testOutput()
+	{
+		$output = new Output();
+		$output->write('something');
+		global $written;
+		$this->assertEquals('something'.PHP_EOL, $written);
 	}
 }

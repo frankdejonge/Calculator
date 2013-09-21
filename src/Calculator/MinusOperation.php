@@ -1,5 +1,7 @@
 <?php
 
+namespace Calculator;
+
 class MinusOperation extends AbstractOperation
 {
 	protected $token = '-';
