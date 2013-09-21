@@ -13,12 +13,12 @@ class Parser
 
 	public function parse()
 	{
-		$input = $this->parseGroups($this->input);
+		$input = $this->parseGroup($this->input);
 
 		return $input;
 	}
 
-	public function parseGroups($input)
+	protected function parseGroup($input)
 	{
 		$segments = [];
 		$parts = $this->parseString($input);
@@ -26,13 +26,6 @@ class Parser
 		foreach ($parts as $part)
 		{
 			$part = trim($part);
-
-			if (preg_match('/\(.+\)/', $part))
-			{
-				$parser = new static($this->calculator, substr($part, 1, -1));
-
-				$part = $parser->parse();
-			}
 
 			if (is_numeric($part))
 			{
@@ -49,14 +42,14 @@ class Parser
 		return $this->compute($segments);
 	}
 
-	public function compute(array $segments)
+	protected function compute(array $segments)
 	{
 		$grouped = $this->groupByPrecedance($segments);
 
 		return $this->executeGroup($grouped);
 	}
 
-	public function executeGroup($group)
+	protected function executeGroup($group)
 	{
 		$first = array_shift($group);
 		$result = is_object($first) ? $first->getValue() : $this->executeGroup($first);
@@ -86,7 +79,7 @@ class Parser
 		return new Number($result);
 	}
 
-	public function groupByPrecedance(array $segments)
+	protected function groupByPrecedance(array $segments)
 	{
 		$group = [];
 		$precedance = false;
@@ -106,8 +99,7 @@ class Parser
 
 			if ($segment->getPrecedence() > $precedance)
 			{
-				$precedance = $segment->getPrecedence();
-				$last = array_pop($group);
+				array_pop($group);
 				$tail = array_slice($segments, $index-3);
 				$group[] = $this->groupByPrecedance($tail);
 
@@ -121,7 +113,20 @@ class Parser
 		return $group;
 	}
 
-	public function parseString($input) {
+	public function parseSubstring($match)
+	{
+		$match = substr($match[0], 1, -1);
+
+		return $this->parseGroup($match);
+	}
+
+	public function parseString($input)
+	{
+		while (strpos($input, '(') !== false)
+		{
+			$input = preg_replace_callback('#\(((?![\(\)]).+)\)#', [$this, 'parseSubstring'], $input);
+		}
+
 		$input = str_replace(' ', '', $input);
 		$length = strlen($input);
 		$parts = array();

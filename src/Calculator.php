@@ -2,7 +2,9 @@
 
 class Calculator
 {
-	public $operations = [];
+	protected $operations = [];
+	protected $input;
+	protected $output;
 
 	public function __construct(InputInterface $input, OutputInterface $output)
 	{
@@ -21,41 +23,31 @@ class Calculator
 	{
 		if ( ! isset($this->operations[$token]))
 		{
-			$this->write(' !! COULD NOT FIND OPERATION FOR TOKEN: '.$token.' !! ');
+			$this->output->write(' !! COULD NOT FIND OPERATION FOR TOKEN: ['.$token.'] !! ');
 			exit(0);
 		}
 
 		return $this->operations[$token];
 	}
 
-	public function read()
-	{
-		return $this->input->read();
-	}
-
-	public function write($output = '', $newline = true)
-	{
-		return $this->output->write($output, $newline);
-	}
-
 	public function run()
 	{
-		$this->write('Enter a calculation and press enter to continue (empty line to quit):');
-		$this->write();
-		$this->write('CALCULATION: ', false);
+		$this->output->write('Enter a calculation and press enter to continue (empty line to quit):');
+		$this->output->write();
+		$this->output->write('CALCULATION: ', false);
 
-		while ($input = $this->read())
+		while ($input = $this->input->read())
 		{
 			$output = $this->execute($input);
-			$this->write('RESULT = '.$output);
-			$this->write();
-			$this->write('CALCULATION: ', false);
+			$this->output->write('RESULT = '.$output);
+			$this->output->write();
+			$this->output->write('CALCULATION: ', false);
 		}
 
 		$this->write('Bye!');
 	}
 
-	public function execute($input)
+	protected function execute($input)
 	{
 		$parser = new Parser($this, $input);
 
