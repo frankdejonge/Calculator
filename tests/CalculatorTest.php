@@ -23,6 +23,17 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 	public function testUnknownOperation()
 	{
 		$this->input->setInput([
+			'undefined(1)',
+		]);
+
+		$this->calculator->run();
+		$output = $this->output->getOutput();
+		$this->assertContains("Error: Could not find operation for token [undefined]", $output);
+	}
+
+	public function testUnknownFunction()
+	{
+		$this->input->setInput([
 			'10 # 10',
 			'10 - 10',
 			'10 + 10',

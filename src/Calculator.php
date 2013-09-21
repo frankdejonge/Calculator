@@ -41,13 +41,6 @@ class Calculator
 
 	public function getFunction($token)
 	{
-		if ( ! isset($this->functions[$token]))
-		{
-			$token = preg_replace('/[0-9\.]/', '', $token);
-
-			throw new LogicException('Could not find function for token ['.$token.']');
-		}
-
 		return $this->functions[$token];
 	}
 
@@ -90,13 +83,6 @@ class Calculator
 		}
 		catch (Exception $e)
 		{
-			if ( ! ($e instanceof LogicException))
-			{
-				$this->output->write((string) $e);
-
-				return false;
-			}
-
 			$this->output->write('Error: '.$e->getMessage());
 
 			return false;
