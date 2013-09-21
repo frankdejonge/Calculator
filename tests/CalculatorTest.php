@@ -16,6 +16,7 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 		$this->calculator->addOperation(new TimesOperation);
 		$this->calculator->addOperation(new DivideOperation);
 		$this->calculator->addOperation(new ModulusOperation);
+		$this->calculator->addOperation(new PowerOperation);
 	}
 
 	public function testUnknownOperation()
@@ -44,6 +45,7 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 			['2 - 1', 1],
 			['2 / 1', 2],
 			['2 * 2', 4],
+			['2 ^ 2', 4],
 			['2 * 2.5', 5],
 			['2 + (20 * 2)', 42],
 			['10 * 20 - 2 / 2 + 2', 201],
