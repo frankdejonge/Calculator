@@ -128,38 +128,13 @@ class Parser
 		}
 
 		$input = str_replace(' ', '', $input);
-		$length = strlen($input);
-		$parts = array();
-		$level = 0;
-		$current = '';
 
-		for ($i = 0; $i < $length; $i++)
-		{
-			$char = $input[$i];
+		$replacer = function ($match) {
+			return '__EXPLODE__'.$match[0].'__EXPLODE__';
+		};
 
-			if ($char === '(')
-			{
-				$level += 1;
-			}
-			elseif ($char === ')')
-			{
-				$level -= 1;
-			}
+		$input = preg_replace_callback('/(?<=[0-9])\D{1}/', $replacer, $input);
 
-			$current .= $char;
-
-			if ($level === 0 and strlen($current))
-			{
-				if (is_numeric($current) and is_numeric(end($parts)))
-				{
-					$current = array_pop($parts).$current;
-				}
-
-				$parts[] = $current;
-				$current = '';
-			}
-		}
-
-		return $parts;
+		return explode('__EXPLODE__', $input);
 	}
 }
