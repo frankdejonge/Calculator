@@ -47,6 +47,7 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
 			['2 * 2.5', 5],
 			['2 + (20 * 2)', 42],
 			['10 * 20 - 2 / 2 + 2', 201],
+			['(20*4/2)-((13)+14+(4/2))', 11],
 			['2 % 3', 2]
 		];
 	}
