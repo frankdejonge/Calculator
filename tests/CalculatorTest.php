@@ -40,6 +40,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 		$this->calculator->addOperation(new PowerOperation);
 		$this->calculator->addFunction(new SqrtFunction);
 		$this->calculator->addFunction(new RoundFunction);
+		$this->calculator->addFunction(new PiFunction);
 	}
 
 	public function testUnknownOperation()
@@ -76,6 +77,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 	{
 		return [
 			['1 + 1', 2],
+			['round()', 0],
+			['pi()', M_PI],
+			['round(pi())', round(M_PI)],
 			['2 - 1', 1],
 			['2 / 1', 2],
 			['2 * 2', 4],

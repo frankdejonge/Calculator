@@ -18,24 +18,50 @@ class Parser
 		return $function->execute($this, $match[2]);
 	}
 
-	public function parse($input)
+	public function executeFunctions($input)
 	{
-		$input = trim($input);
 		$functions = $this->calculator->getFunctionNames();
 
-		if ( ! empty($functions))
+		if (empty($functions))
 		{
-			$regex = '#('.join('|', $functions).')\((.*)\)#';
-
-			while (preg_match($regex, $input))
-			{
-				$input = preg_replace_callback($regex, [$this, 'parseFunctions'], $input);
-			}
+			return $input;
 		}
 
+		$regex = '#('.join('|', $functions).')\((.*)\)#';
+
+		while (preg_match($regex, $input))
+		{
+			$input = preg_replace_callback($regex, [$this, 'parseFunctions'], $input);
+		}
+
+		return $input;
+	}
+
+	public function executeNesting($input)
+	{
 		while (strpos($input, '(') !== false)
 		{
-			$input = preg_replace_callback('#\(((?![\(\)]).)+\)#u', [$this, 'parseNesting'], $input);
+			$callback = [$this, 'parseNesting'];
+
+			$input = preg_replace_callback('#\(((?![\(\)]).)+\)#u', $callback, $input);
+		}
+
+		return $input;
+	}
+
+	public function parse($input)
+	{
+		if (empty($input))
+		{
+			return 0;
+		}
+
+		$input = $this->executeFunctions($input);
+		$input = $this->executeNesting($input);
+
+		if (preg_match('#^\D#', $input))
+		{
+			$input = '0'.$input;
 		}
 
 		$output = $this->parseGroup($input);
@@ -130,7 +156,8 @@ class Parser
 	public function parseNesting($match)
 	{
 		$partial = substr($match[0], 1, -1);
-		return $this->parseGroup($partial);
+
+		return $this->parse($partial);
 	}
 
 	public function parseString($input)

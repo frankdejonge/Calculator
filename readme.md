@@ -1,3 +1,6 @@
+16 Juni 2005
+6-7-2010
+
 # So, there's this thing called a calculator.
 
 On a lonely Saturday evening, my girlfriend was out of town, I was in need of some serious nerding. A challenge came to light when one of the people in my IRC channel was given a coding challenge. I had just went to one of the @AmsterdamPHP (follow them, they're awesome) meet-ups here in Amsterdam (duh…). I was up for the challenge.
@@ -13,6 +16,7 @@ I can honestly say, that I didn't expect myself to go this far into it. It was m
 The calculator can now:
 
 #### Do basic math
+
 * Additions
 * Subtractions
 * Multiplications
